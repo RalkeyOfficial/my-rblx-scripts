@@ -109,9 +109,9 @@ getgenv().defaultJump = game.Players.LocalPlayer.Character.Humanoid.JumpPower
 -- == UI ==============================================================
 
 local Window = Rayfield:CreateWindow({
-		Name = "Speed Run Simulator GUI | 1.0.2 | by Ralkey",
+		Name = "Speed Run Simulator GUI | 1.0.3 | by Ralkey",
 		LoadingTitle = "Speed Run Simulator GUI",
-		LoadingSubtitle = "v1.0.2 | by Ralkey",
+		LoadingSubtitle = "v1.0.3 | by Ralkey",
 		ConfigurationSaving = {
 			Enabled = true,
 			FolderName = "Speed Run Simulator", -- Create a custom folder for your hub/game
@@ -288,6 +288,28 @@ utilities:CreateButton({
 
 
 
+local teleports = Window:CreateTab("Teleports")
+
+teleports:CreateSection("Teleports")
+
+teleports:CreateButton({
+	Name = "teleport to Start",
+	Callback = function()
+		local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+		rootPart.CFrame = CFrame.new(1371.8092, 198.777573, -476.388733, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+	end,
+})
+
+teleports:CreateButton({
+	Name = "teleport to VIP room",
+	Callback = function()
+		local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+		rootPart.CFrame = CFrame.new( -430, 205, -1505, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+	end,
+})
+
+
+
 local speed = Window:CreateTab("Speed")
 
 speed:CreateSection("Get speed")
@@ -396,17 +418,202 @@ speed:CreateToggle({
 
 
 
-local race = Window:CreateTab("Race")
+local obbys = Window:CreateTab("Obbys")
 
-race:CreateSection("Race tool")
+obbys:CreateSection("Race teleport")
 
-race:CreateButton({
+obbys:CreateButton({
 	Name = "Win race",
 	Callback = function()
 		local user = game.Players.LocalPlayer.Character.Head
 		local finish = game:GetService("Workspace").GameAssets.Races.Grassy.Course.Finish.RaceEnd
 
 		firetouchinterest(user, finish, 0)
+	end,
+})
+
+obbys:CreateSection("Finish Obby teleports")
+
+obbys:CreateButton({
+	Name = "finish desert",
+	Callback = function()
+		local obbyName = "DESERT OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.Desert.Obby.Course.Finish.IcePortal.Portal
+			.Ice
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish ice",
+	Callback = function()
+		local obbyName = "ICE OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.Iceland.Obby.Course.Finish.LavaPortal.Portal
+			.Frame.Lava
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish lava",
+	Callback = function()
+		local obbyName = "LAVA OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.Lavaland.Obby.Course.Finish.GraveyardPortal
+			.Portal.Frame.Graveyard
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish graveyard",
+	Callback = function()
+		local obbyName = "GRAVEYARD OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.Graveyard.Obby.Course.Finish.HeavenPortal
+			.Portal.Frame.Heaven
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish heaven",
+	Callback = function()
+		local obbyName = "HEAVEN OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.Heaven.Obby.Course.Finish.CandylandPortal
+			.Portal.Frame.Candyland
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish candyland",
+	Callback = function()
+		local obbyName = "CANDYLAND OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.Candyland.Obby.Course.Finish.MoonPortal.Portal
+			.Frame.Moon
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish moon",
+	Callback = function()
+		local obbyName = "MOON OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.Moon.Obby.Course.Finish.OceanPortal.Portal.Frame
+			["Bikini Bottom"]
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish ocean sea",
+	Callback = function()
+		local obbyName = "BIKINI BOTTOM OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.Ocean.Obby.Course.Finish.AdventureTimePortal
+			.Portal.Frame["Adventure Time"]
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish adventure time",
+	Callback = function()
+		local obbyName = "ADVENTURE TIME OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.AdventureTime.Obby.Course.Finish.JunglePortal
+			.Portal.Frame.Jungle
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish jungle",
+	Callback = function()
+		local obbyName = "JUNGLE OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.Jungle.Obby.Course.Finish.MedievalPortal.Portal
+			.Frame.Medieval
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish medieval",
+	Callback = function()
+		local obbyName = "MEDIEVAL OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.Medieval.Obby.Course.Finish.Portal
+			["WildWestPortal (Medieval Obby End)"].Portal.Frame["Wild West"]
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish wild west",
+	Callback = function()
+		local obbyName = "WILD WEST OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps["Wild West"].Obby.Course.Finish
+			["SkyIslandsPortal (Wild West Obby)"].Portal.Frame["Sky Islands"]
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
+	end,
+})
+obbys:CreateButton({
+	Name = "finish sky islands",
+	Callback = function()
+		local obbyName = "SKY ISLANDS OBBY"
+		local obbyTimerGui = game.Players.LocalPlayer.PlayerGui.MainUI.ObbyTimer
+		local obbyPortal = game:GetService("Workspace").GameAssets.Maps.SkyIslands.Obby.Course.Finish.HomePortal.Portal
+			.Frame.Spawn
+
+		if (obbyTimerGui.visible == true and obbyTimerGui.ObbyName.Value == obbyName) then
+			local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
+			rootPart.CFrame = obbyPortal.CFrame
+		end
 	end,
 })
 
