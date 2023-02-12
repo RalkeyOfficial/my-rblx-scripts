@@ -109,9 +109,9 @@ getgenv().defaultJump = game.Players.LocalPlayer.Character.Humanoid.JumpPower
 -- == UI ==============================================================
 
 local Window = Rayfield:CreateWindow({
-		Name = "Speed Run Simulator Hub | 1.0.1 | by Ralkey",
+		Name = "Speed Run Simulator Hub | 1.0.2 | by Ralkey",
 		LoadingTitle = "Speed Run Simulator Hub",
-		LoadingSubtitle = "v1.0.1 | by Ralkey",
+		LoadingSubtitle = "v1.0.2 | by Ralkey",
 		ConfigurationSaving = {
 			Enabled = true,
 			FolderName = "Speed Run Simulator", -- Create a custom folder for your hub/game
@@ -228,6 +228,37 @@ utilities:CreateSlider({
 			end
 		end)
 	end,
+})
+
+utilities:CreateButton({
+	Name = "Btools",
+	Callback = function()
+		local Player = game.Players.LocalPlayer
+		local Hammer = Instance.new('HopperBin')
+		Hammer.BinType = 'Hammer'
+		Hammer.Name = 'Hammer'
+		Hammer.Parent = Player.Backpack
+		Hammer:Clone().Parent = Player.StarterGear
+
+		local Clone = Instance.new('HopperBin')
+		Clone.BinType = 'Clone'
+		Clone.Name = 'Clone'
+		Clone.Parent = Player.Backpack
+		Clone:Clone().Parent = Player.StarterGear
+
+		local Grab = Instance.new('HopperBin')
+		Grab.BinType = 'Grab'
+		Grab.Name = 'Grab'
+		Grab.Parent = Player.Backpack
+		Grab:Clone().Parent = Player.StarterGear
+	end
+})
+
+utilities:CreateButton({
+	Name = "Infinite Yield FE",
+	Callback = function()
+		loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+	end
 })
 
 
