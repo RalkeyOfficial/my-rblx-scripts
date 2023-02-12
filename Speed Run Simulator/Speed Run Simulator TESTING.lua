@@ -109,8 +109,8 @@ getgenv().defaultJump = game.Players.LocalPlayer.Character.Humanoid.JumpPower
 -- == UI ==============================================================
 
 local Window = Rayfield:CreateWindow({
-		Name = "Speed Run Simulator Hub | 1.0.2 | by Ralkey",
-		LoadingTitle = "Speed Run Simulator Hub",
+		Name = "Speed Run Simulator GUI | 1.0.2 | by Ralkey",
+		LoadingTitle = "Speed Run Simulator GUI",
 		LoadingSubtitle = "v1.0.2 | by Ralkey",
 		ConfigurationSaving = {
 			Enabled = true,
