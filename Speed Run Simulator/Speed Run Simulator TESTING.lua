@@ -218,15 +218,29 @@ utilities:CreateSlider({
 	Callback = function(Value)
 		getgenv().jumpValue = Value
 
-		if getgenv().setJump then
+		if (getgenv().setJump) then
 			game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
 		end
 
 		task.spawn(function()
-			while getgenv().setJump and wait() do
+			while (getgenv().setJump and wait()) do
 				game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
 			end
 		end)
+	end,
+})
+
+utilities:CreateToggle({
+	Name = "toggle trading",
+	CurrentValue = false,
+	Flag = "toggleTrade", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		if (Value == false) then
+			game:GetService("ReplicatedStorage").Remotes.EnableTrading:FireServer("Off")
+		end
+		if (Value == true) then
+			game:GetService("ReplicatedStorage").Remotes.EnableTrading:FireServer("On")
+		end
 	end,
 })
 
