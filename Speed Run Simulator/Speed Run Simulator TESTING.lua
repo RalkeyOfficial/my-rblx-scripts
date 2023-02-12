@@ -109,9 +109,9 @@ getgenv().defaultJump = game.Players.LocalPlayer.Character.Humanoid.JumpPower
 -- == UI ==============================================================
 
 local Window = Rayfield:CreateWindow({
-		Name = "Speed Run Simulator Hub | by Ralkey",
+		Name = "Speed Run Simulator Hub | 1.0.1 | by Ralkey",
 		LoadingTitle = "Speed Run Simulator Hub",
-		LoadingSubtitle = "by Ralkey",
+		LoadingSubtitle = "v1.0.1 | by Ralkey",
 		ConfigurationSaving = {
 			Enabled = true,
 			FolderName = "Speed Run Simulator", -- Create a custom folder for your hub/game
@@ -230,20 +230,6 @@ utilities:CreateSlider({
 	end,
 })
 
-utilities:CreateToggle({
-	Name = "toggle trading",
-	CurrentValue = false,
-	Flag = "toggleTrade", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		if (Value == false) then
-			game:GetService("ReplicatedStorage").Remotes.EnableTrading:FireServer("Off")
-		end
-		if (Value == true) then
-			game:GetService("ReplicatedStorage").Remotes.EnableTrading:FireServer("On")
-		end
-	end,
-})
-
 
 utilities:CreateSection("Kill hud")
 
@@ -291,15 +277,24 @@ speed:CreateToggle({
 })
 
 local function collectAllOrbs()
-	local orbs = game:GetService("Workspace").GameAssets.GlobalAssets.OrbSpawns -- all orbs in map
-	local user = game.Players.LocalPlayer.Character.Head -- player root
+	local user = game.Players.LocalPlayer.Character.Head
 
-	for i, v in pairs(orbs:GetChildren()) do -- loop over all orbs
-		if v:IsA("MeshPart") then -- if its a mesh
-			firetouchinterest(user, v, 0) -- touch orb with player root
-		elseif v:IsA("Model") then -- if its a model
-			local summerOrb = v["Orb.1"] -- get the mesh inside the model
-			firetouchinterest(user, summerOrb, 0) -- touch orb with player root
+	local orbs = game:GetService("Workspace").GameAssets.GlobalAssets.OrbSpawns:GetChildren()
+	local maps = game:GetService("Workspace").GameAssets.Maps
+
+	-- go through all maps and get orbs
+	for _, _maps in pairs(maps:GetChildren()) do
+		for _, _orbs in pairs(_maps.Map.Interactables.Orbs:GetChildren()) do
+			table.insert(orbs, _orbs)
+		end
+	end
+
+	for _, _orb in pairs(orbs) do
+		if _orb.Name == "Orb" or _orb.Name == "PurpleOrb" then
+			firetouchinterest(user, _orb, 0)
+		elseif _orb.Name == "SummerOrb" then
+			local summerOrb = _orb["Orb.1"]
+			firetouchinterest(user, summerOrb, 0)
 		end
 	end
 end
@@ -321,6 +316,66 @@ speed:CreateToggle({
 				collectAllOrbs()
 			end
 		end)
+	end,
+})
+
+local function collectAllRings()
+	local user = game.Players.LocalPlayer.Character.Head
+
+	local rings = game:GetService("Workspace").GameAssets.GlobalAssets.OrbSpawns:GetChildren()
+	local maps = game:GetService("Workspace").GameAssets.Maps
+
+	-- go through all maps and get orbs
+	for _, _maps in pairs(maps:GetChildren()) do
+		if (_maps.Name == "SkyIslands") then -- FUCK SKY ISLANDS
+			do break end -- skips this loop itteration
+		end
+
+		for _, _rings in pairs(_maps.Map.Interactables.Ramps:GetChildren()) do
+			table.insert(rings, _rings)
+		end
+	end
+
+	for _, _ring in pairs(rings) do
+		if (_ring.Name == "Ring") then
+			firetouchinterest(user, _ring, 0)
+		end
+	end
+end
+
+speed:CreateButton({
+	Name = "Collect rings",
+	Callback = collectAllRings,
+})
+
+speed:CreateToggle({
+	Name = "Collect rings loop",
+	CurrentValue = false,
+	Flag = nil, -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Value)
+		getgenv().collectRingsLoop = Value
+
+		task.spawn(function()
+			while getgenv().collectRingsLoop and task.wait() do
+				collectAllRings()
+			end
+		end)
+	end,
+})
+
+
+
+local race = Window:CreateTab("Race")
+
+race:CreateSection("Race tool")
+
+race:CreateButton({
+	Name = "Win race",
+	Callback = function()
+		local user = game.Players.LocalPlayer.Character.Head
+		local finish = game:GetService("Workspace").GameAssets.Races.Grassy.Course.Finish.RaceEnd
+
+		firetouchinterest(user, finish, 0)
 	end,
 })
 
@@ -347,6 +402,7 @@ rebirth:CreateToggle({
 		task.spawn(function()
 			while getgenv().rebirthLoop and task.wait() do
 				collectAllOrbs()
+				collectAllRings()
 				game:GetService("ReplicatedStorage").Remotes.AddSpeed:FireServer()
 				game:GetService("ReplicatedStorage").Remotes.Rebirth:FireServer()
 			end
