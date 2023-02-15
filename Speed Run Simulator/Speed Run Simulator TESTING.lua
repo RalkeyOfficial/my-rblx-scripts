@@ -9,10 +9,6 @@ if game.PlaceId ~= 5293755937 then
 	return
 end
 
--- == IMPORTS =========================================================
-
-local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
-
 -- == VARIABLES =======================================================
 
 local godlyPets = {
@@ -101,38 +97,121 @@ local randomPets = {
 	"Medieval Egg",
 }
 
--- == DEFUALT VALUES ==================================================
+-- == FUNCTIONS ======================================================
 
-getgenv().defaultSpeed = game.Players.LocalPlayer.Character.Humanoid.WalkSpeed
-getgenv().defaultJump = game.Players.LocalPlayer.Character.Humanoid.JumpPower
+function toggleAntiAfk(value)
+	getgenv().antiAfkKick = value
+
+	task.spawn(function()
+		-- not my code, thank you kind stranger of the internet for making open source code
+		while getgenv().antiAfkKick and task.wait() do
+			repeat task.wait() until game:IsLoaded()
+			game:GetService("Players").LocalPlayer.Idled:connect(function()
+				game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+			end)
+		end
+	end)
+end
+
+function toggleSpeedChanger(value)
+	-- toggle speed slider
+	getgenv().setSpeed = value -- boolean
+
+	if value == true then
+		-- save defaultSpeed before changing speed
+		getgenv().defaultSpeed = game.Players.LocalPlayer.Character.Humanoid.WalkSpeed
+
+		-- set speed to speed value or 50
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = getgenv().speedValue or 50
+
+		-- keep setting speed value to combat the game setting your speed
+		task.spawn(function()
+			while getgenv().setSpeed and wait() do
+				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = getgenv().speedValue or 50
+			end
+		end)
+	end
+
+	if value == false then
+		-- change speed to default speed
+		wait() -- this ensures the previous while loop does not fire after this code
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = getgenv().defaultSpeed
+	end
+end
+
+function setSpeed(value)
+	getgenv().speedValue = value
+
+	-- if set speed is on, set the speed value
+	if getgenv().setSpeed then
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+	end
+end
+
+function toggleJumpChanger(value)
+	-- turn jump slider on
+	getgenv().setJump = value -- boolean
+
+	if value == true then
+		-- save defaultJump before changing jump
+		getgenv().defaultJump = game.Players.LocalPlayer.Character.Humanoid.JumpPower
+
+		-- set jump to jump value or 50
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = getgenv().jumpValue or 50
+
+		-- keep setting jump value to combat the game setting your jump
+		task.spawn(function()
+			while getgenv().setJump and wait() do
+				game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
+			end
+		end)
+	end
+
+	if Value == false then
+		-- change jump to default jump
+		wait()
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = getgenv().defaultJump
+	end
+end
+
+function setJump(value)
+	getgenv().jumpValue = value
+
+	-- if set jump is on, set the jump value
+	if getgenv().setJump then
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = value
+	end
+end
 
 -- == UI ==============================================================
 
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+
 local Window = Rayfield:CreateWindow({
-		Name = "Speed Run Simulator GUI | 1.0.3 | by Ralkey",
-		LoadingTitle = "Speed Run Simulator GUI",
-		LoadingSubtitle = "v1.0.3 | by Ralkey",
-		ConfigurationSaving = {
-			Enabled = true,
-			FolderName = "Speed Run Simulator", -- Create a custom folder for your hub/game
-			FileName = "SpeedRunSimHub"
-		},
-		Discord = {
-			Enabled = false,
-			Invite = "", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD.
-			RememberJoins = true -- Set this to false to make them join the discord every time they load it up
-		},
-		KeySystem = false, -- Set this to true to use our key system
-		KeySettings = {
-			Title = "",
-			Subtitle = "",
-			Note = "",
-			FileName = "",
-			SaveKey = false,
-			GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-			Key = ""
-		}
-	})
+	Name = "Speed Run Simulator GUI | 1.0.3 | by Ralkey",
+	LoadingTitle = "Speed Run Simulator GUI",
+	LoadingSubtitle = "v1.0.3 | by Ralkey",
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = "Speed Run Simulator", -- Create a custom folder for your hub/game
+		FileName = "SpeedRunSimHub"
+	},
+	Discord = {
+		Enabled = false,
+		Invite = "", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD.
+		RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+	},
+	KeySystem = false, -- Set this to true to use our key system
+	KeySettings = {
+		Title = "",
+		Subtitle = "",
+		Note = "",
+		FileName = "",
+		SaveKey = false,
+		GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+		Key = ""
+	}
+})
 
 local utilities = Window:CreateTab("Utilities")
 
@@ -142,33 +221,14 @@ utilities:CreateToggle({
 	Name = "anti-afk kick",
 	CurrentValue = false,
 	Flag = "antiAfkKick", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		getgenv().antiAfkKick = Value
-
-		task.spawn(function()
-			while getgenv().antiAfkKick and task.wait() do
-				repeat task.wait() until game:IsLoaded()
-				game:GetService("Players").LocalPlayer.Idled:connect(function()
-					game:GetService("VirtualUser"):ClickButton2(Vector2.new())
-				end)
-			end
-		end)
-	end,
+	Callback = toggleAntiAfk,
 })
 
 utilities:CreateToggle({
 	Name = "toggle speed changer",
 	CurrentValue = false,
 	Flag = "setSpeed", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		getgenv().setSpeed = Value -- boolean
-
-		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = getgenv().speedValue or 50
-
-		if Value == false then
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = getgenv().defaultSpeed
-		end
-	end,
+	Callback = toggleSpeedChanger,
 })
 
 utilities:CreateSlider({
@@ -178,34 +238,14 @@ utilities:CreateSlider({
 	Suffix = "speed",
 	CurrentValue = 50,
 	Flag = "speed", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		getgenv().speedValue = Value
-
-		if getgenv().setSpeed then
-			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
-		end
-
-		task.spawn(function()
-			while getgenv().setSpeed and wait() do
-				game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
-			end
-		end)
-	end,
+	Callback = setSpeed,
 })
 
 utilities:CreateToggle({
 	Name = "toggle jump changer",
 	CurrentValue = false,
 	Flag = "setJump", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		getgenv().setJump = Value -- boolean
-
-		game.Players.LocalPlayer.Character.Humanoid.JumpPower = getgenv().jumpValue or 50
-
-		if Value == false then
-			game.Players.LocalPlayer.Character.Humanoid.JumpPower = getgenv().defaultJump
-		end
-	end,
+	Callback = toggleJumpChanger,
 })
 
 utilities:CreateSlider({
@@ -215,19 +255,7 @@ utilities:CreateSlider({
 	Suffix = "jump power",
 	CurrentValue = 50,
 	Flag = "jump", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Value)
-		getgenv().jumpValue = Value
-
-		if (getgenv().setJump) then
-			game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
-		end
-
-		task.spawn(function()
-			while (getgenv().setJump and wait()) do
-				game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
-			end
-		end)
-	end,
+	Callback = setJump,
 })
 
 utilities:CreateButton({
